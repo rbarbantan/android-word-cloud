@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML Basic 1.1//EN"
+        "http://www.w3.org/TR/xhtml-basic/xhtml-basic11.dtd">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, user-scalable=no">
+</head>
+    <h1>Android cloud</h1>
+<script src="d3.js"></script>
+<script src="d3.layout.cloud.js"></script>
+<script>(function() {
+    var fill = d3.scale.category20();
+    var layout = d3.layout.cloud()
+        .size([300, 300 ])
+        .words([
+          "Donut", "Eclair", "Froyo", "Gingerbread", "Honeycomb", "Ice Cream Sandwich", "Jelly Bean",
+          "KitKat", "Lollipop", "Marshmallow"].map(function(d) {
+          return {text: d, size: 10 + Math.random() * 40};
+        }))
+        .padding(5)
+        .rotate(function() { return ~~(Math.random() * 2) * 90; })
+        .font("Impact")
+        .fontSize(function(d) { return d.size; })
+        .on("end", draw);
+    layout.start();
+    function draw(words) {
+      d3.select("body").append("svg")
+          .attr("width", layout.size()[0])
+          .attr("height", layout.size()[1])
+        .append("g")
+          .attr("transform", "translate(" + layout.size()[0] / 2 + "," + layout.size()[1] / 2 + ")")
+        .selectAll("text")
+          .data(words)
+        .enter().append("text")
+          .style("font-size", function(d) { return d.size + "px"; })
+          .style("font-family", "Impact")
+          .style("fill", function(d, i) { return fill(i); })
+          .attr("text-anchor", "middle")
+          .attr("transform", function(d) {
+            return "translate(" + [d.x, d.y] + ")rotate(" + d.rotate + ")";
+          })
+          .text(function(d) { return d.text; });
+    }
+})();</script>
+<body/>
